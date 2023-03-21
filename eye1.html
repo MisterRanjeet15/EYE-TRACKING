@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>WebGazer Eye Tracking Heatmap Demo</title>
+    <script src="https://webgazer.cs.brown.edu/webgazer.js"></script>
+    <script src="webgl-heatmap.js"></script>
+    <script>
+      window.onload = function() {
+        webgazer.setGazeListener(function(data, elapsedTime) {
+          if (data == null) return;
+          var x = data.x; // get x coordinate of gaze position
+          var y = data.y; // get y coordinate of gaze position
+          addDataPoint(x, y); // add data point to heatmap
+        }).begin();
+      }
+
+      var heatmap = null;
+
+      function addDataPoint(x, y) {
+        if (heatmap == null) {
+          heatmap = createWebGLHeatmap({
+            canvas: document.getElementById('heatmap-canvas')
+          });
+        }
+        heatmap.addPoint(x, y); // add data point to heatmap
+        heatmap.update(); // update the heatmap display
+      }
+    </script>
+  </head>
+  <body>
+    <h1>WebGazer Eye Tracking Heatmap Demo</h1>
+    <p>Look around the page to see your gaze position heatmap.</p>
+    <canvas id="heatmap-canvas" style="position: absolute; left: 0; top: 0;"></canvas>
+  </body>
+</html>
